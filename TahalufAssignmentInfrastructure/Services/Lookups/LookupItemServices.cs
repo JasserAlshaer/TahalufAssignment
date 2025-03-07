@@ -15,11 +15,13 @@ namespace TahalufAssignmentInfrastructure.Services
             _context = context;
         }
 
-        public async Task<List<LookupItemDto>> GetLookupItem()
+        public async Task<List<LookupItemDto>> GetLookupItem(int? typeId)
         {
             var lookupItems = from item in _context.LookupItems
                               join parent in _context.LookupTypes
                               on item.LookupTypeId equals parent.Id
+                              where
+                              (typeId == null)|| (item.LookupTypeId == typeId)
                               select new LookupItemDto
                               {
                                   Id = item.Id,

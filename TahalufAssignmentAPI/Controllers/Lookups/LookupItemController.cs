@@ -21,13 +21,13 @@ namespace TahalufAssignmentAPI.Controllers.Lookups
 
         [HttpGet("GetLookupItem")]
         [RoleRequirement("Admin")]
-        public async Task<IActionResult> GetLookupItem([FromQuery]DatePaginationRequest<LookupItemFillterationDto> input)
+        public async Task<IActionResult> GetLookupItem([FromQuery]int? ItemTypeId)
         {
             var response = new DatePaginationResponse<LookupItemDto>();
             Log.Information("Get LookupItems Start Execution");
             try
             {
-                var items = await _lookupItemServices.GetLookupItem();
+                var items = await _lookupItemServices.GetLookupItem(ItemTypeId);
                 response.Items = items;
                 response.StatusCode = items.Count > 0 ? 200 : 204;
                 response.Message = $"Completed Done";

@@ -2,5 +2,6 @@
 {
     public class LookupItemFillterationDto
     {
+        public int ItemTypeId { get; set; }
     }
 }

@@ -4,7 +4,7 @@ namespace TahalufAssignmentCore.Services
 {
     public interface ILookupItemServices
     {
-        Task<List<LookupItemDto>> GetLookupItem();
+        Task<List<LookupItemDto>> GetLookupItem(int? typeId);
 
         Task<string> CreateLookupItem(CreateLookupItemDto input);
 
