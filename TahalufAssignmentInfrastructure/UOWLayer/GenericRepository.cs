@@ -38,12 +38,17 @@ namespace TahalufAssignmentInfrastructure.Repositories
             await _dbSet.AddAsync(entity);
         }
 
-        public void Update(TEntity entity)
+        public Task<bool> IsExisit(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _dbSet.AnyAsync(predicate);
+        }
+
+        public async Task UpdateAsync(TEntity entity)
         {
             _dbSet.Update(entity);
         }
 
-        public void Delete(TEntity entity)
+        public async Task DeleteAsync(TEntity entity)
         {
             _dbSet.Remove(entity);
         }

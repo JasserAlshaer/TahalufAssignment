@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TahalufAssignmentCore.Context;
+using TahalufAssignmentCore.DTOs.APIs.Responses;
 using TahalufAssignmentCore.DTOs.Companies;
 using TahalufAssignmentCore.DTOs.Orgnizations;
 using TahalufAssignmentCore.Entities.Companies;
@@ -130,8 +131,9 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                 throw new Exception($"Error Upon Completing Transaction  {ex.Message}");
             }
         }
-        public async Task<List<OrgnizationDTO>> SearchOrgnization(SearchOrgnizationDTO input, int pageIndex, int pageSize)
+        public async Task<LoadItemDTO<OrgnizationDTO>> SearchOrgnization(SearchOrgnizationDTO input, int pageIndex, int pageSize)
         {
+            LoadItemDTO<OrgnizationDTO> output = new LoadItemDTO<OrgnizationDTO>();
             try
             {
                 var query = from orgnization in _dbContext.Orgnizations
@@ -149,7 +151,9 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                                 CreationDate = orgnization.CreationDate.ToShortDateString(),
                                 OrgnizationName = orgnization.Name
                             };
-                return await query.Skip(pageIndex*pageSize).Take(pageSize).ToListAsync();
+                output.Items = await query.Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
+                output.TotalItem = await query.CountAsync();
+                return output; 
             }
             catch (Exception ex)
             {
