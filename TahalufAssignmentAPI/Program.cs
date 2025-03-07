@@ -14,6 +14,8 @@ using System.Text;
 using TahalufAssignmentCore.Interfaces;
 using TahalufAssignmentInfrastructure.Repositories;
 using TahalufAssignmentCore.Mappers;
+using TahalufAssignmentCore.Services.AppServices;
+using TahalufAssignmentInfrastructure.Services.AppServices;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -79,6 +81,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ILookupTypeServices, LookupTypeServices>();
 builder.Services.AddScoped<ILookupItemServices, LookupItemServices>();
 builder.Services.AddScoped<IAuthanticationService, AuthanticationService>();
+builder.Services.AddScoped<IOrganizationAppService, OrganizationAppService>();
+builder.Services.AddScoped<ICompanyAppService, CompanyAppService>();
 //Enabling With CORS
 builder.Services.AddCors(options =>
 {

@@ -9,6 +9,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TahalufAssignmentCore.Entities.Orgnizations;
+using TahalufAssignmentCore.Entities.Companies;
+using TahalufAssignmentCore.EntitiesConfigurations.Orgnizations;
+using TahalufAssignmentCore.EntitiesConfigurations.Companies;
 
 namespace TahalufAssignmentCore.Context
 {
@@ -18,6 +22,9 @@ namespace TahalufAssignmentCore.Context
         public DbSet<LookupType> LookupTypes { get; set; }
         public DbSet<LookupItem> LookupItems { get; set; }
         public DbSet<User> Users { get; set; }
+        //Project Entity 
+        public DbSet<Orgnization> Orgnizations { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public TahalufAssignmentDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -110,7 +117,8 @@ namespace TahalufAssignmentCore.Context
             modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new LookupTypeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new LookupItemEntityTypeConfiguration());
-
+            modelBuilder.ApplyConfiguration(new OrgnizationEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyEntityTypeConfiguration());
         }
     }
 }

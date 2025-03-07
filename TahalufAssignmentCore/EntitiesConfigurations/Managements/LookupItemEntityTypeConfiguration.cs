@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TahalufAssignmentCore.Entities.Companies;
+using TahalufAssignmentCore.Entities.Orgnizations;
 
 namespace TahalufAssignmentCore.EntitiesConfigurations.Managements
 {
@@ -26,7 +28,9 @@ namespace TahalufAssignmentCore.EntitiesConfigurations.Managements
             //Check 
             builder.ToTable(x => x.HasCheckConstraint("CH_NameAr_Length", "LEN(Name) >= 2"));
             builder.ToTable(x => x.HasCheckConstraint("CH_Name_Length", "LEN(NameAr) >= 2"));
-            //Relationships 
+            //Relationships
+            builder.HasMany<Orgnization>().WithOne().HasForeignKey(x => x.CountryId).OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany<Company>().WithOne().HasForeignKey(x => x.CountryId).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

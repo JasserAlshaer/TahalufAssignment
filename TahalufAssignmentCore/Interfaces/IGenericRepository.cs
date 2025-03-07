@@ -13,7 +13,8 @@ namespace TahalufAssignmentCore.Interfaces
         Task<TEntity> GetByIdAsync(int id);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task AddAsync(TEntity entity);
-        void Update(TEntity entity);
-        void Delete(TEntity entity);
+        Task<bool> IsExisit(Expression<Func<TEntity, bool>> predicate);
+        Task UpdateAsync(TEntity entity);
+        Task DeleteAsync(TEntity entity);
     }
 }
