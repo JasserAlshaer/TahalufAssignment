@@ -28,18 +28,11 @@ namespace TahalufAssignmentInfrastructure.Services
                                           ).FirstOrDefaultAsync();
                     if(authUser != null)
                     {
-                        var code = new Random().Next(111111, 999999);
-                        VerificationCode verfication = new VerificationCode()
-                        {
-                            Code = code.ToString(),
-                            CreationDate = DateTime.Now,
-                            Email = authUser.Email,
-                            IsActive = true,
-                            ModifiedDate = null
-                        };
-                        await _context.AddAsync(verfication);
-                        await _context.SaveChangesAsync();
-                        return authUser != null ? await EmailService.SendEmailUsingMailKetService("Verification Code", authUser.Email, code.ToString(), "Your Login Successfuly Completed") : "Authantication Failed";
+                        authUser.IsLoggedIn = true;
+                        authUser.LastLoginDate = DateTime.Now;
+                        _context.Update(authUser);
+                        _context.SaveChanges();
+                        return authUser != null ? await TokenHelper.GenerateToken(authUser.Id.ToString(), "Admin") : "Authantication Failed";
                     }
                     else
                     {
@@ -62,11 +55,11 @@ namespace TahalufAssignmentInfrastructure.Services
         {
             if (Id != 0)
             {
-                var person = await _context.Users.FirstOrDefaultAsync(x => x.Id == Id);
-                if (person != null)
+                var User = await _context.Users.FirstOrDefaultAsync(x => x.Id == Id);
+                if (User != null)
                 {
-                    person.IsLoggedIn = false;
-                    _context.Update(person);
+                    User.IsLoggedIn = false;
+                    _context.Update(User);
                     _context.SaveChanges();
                     return true;
                 }
@@ -75,7 +68,7 @@ namespace TahalufAssignmentInfrastructure.Services
             else
             {
 
-                throw new Exception("Person Id  Required");
+                throw new Exception("User Id  Required");
 
             }
         }
@@ -83,45 +76,27 @@ namespace TahalufAssignmentInfrastructure.Services
         {
             if (input != null)
             {
-                Person person = new Person()
+                User User = new User()
                 {
                     FirstName = input.FirstName,
-                    MiddleName = input.MiddleName,
                     LastName = input.LastName,
                     Email = input.Email,
-                    FirstNameAr = input.FirstNameAr,
-                    MiddleNameAr = input.MiddleNameAr,
-                    LastNameAr = input.LastNameAr,  
-                    CreatedBy = "Jasser Alshaer",
                     CreationDate = DateTime.Now,
                     IsActive = true,
-                    IsEmailConfirmed = false,
                     IsLoggedIn = false,
-                    IsPhoneConfirmed = false,
                     LastLoginDate = null,
                     ModifiedDate = null ,
                     UserType = input.UserType,
                     Password = HashingHelper.GenerateSHA384String(input.Password),
-                    Phone = input.Phone,
-                    Username = HashingHelper.GenerateSHA384String(input.Username),
-                    UpdatedBy = null
+                    Username = HashingHelper.GenerateSHA384String(input.Username)
                 };
-                await _context.AddAsync(person);
+                await _context.AddAsync(User);
                 await _context.SaveChangesAsync();
-                if (person.Id != 0)
+                if (User.Id != 0)
                 {
-                    var code = new Random().Next(111111, 999999);
-                    VerificationCode verfication = new VerificationCode()
-                    {
-                        Code = code.ToString(),
-                        CreationDate = DateTime.Now,
-                        Email = input.Email,
-                        IsActive = true,
-                        ModifiedDate = null
-                    };
-                    await _context.AddAsync(verfication);
-                    await _context.SaveChangesAsync();
-                    return person != null ? await EmailService.SendEmailUsingMailKetService("Verification Code", input.Email, code.ToString(), "Your Account Successfuly Completed") : "Failed Create New Account";
+                    
+                   
+                    return ("Your Account Successfuly Completed");
                 }
                 else
                 {
@@ -131,62 +106,6 @@ namespace TahalufAssignmentInfrastructure.Services
             else
             {
                 throw new Exception("All Information are Required");
-            }
-        }
-        public async Task<string> VerifyOTPForCreateAccount(VerificationInputDTO input)
-        {
-            if (input != null)
-            {
-                var code = await _context.VerificationCodes.FirstOrDefaultAsync(x => x.Email == input.Email
-                && x.Code == input.Code);
-                if (code != null)
-                {
-                    code.IsActive = false;
-                    code.ModifiedDate = DateTime.Now;
-                    _context.Update(code);
-                    _context.SaveChanges();
-
-                    var person = await _context.Users.FirstOrDefaultAsync(x => x.Email == input.Email);
-                    if (person != null)
-                    {
-                        person.IsEmailConfirmed = true;
-                        person.IsActive = true;
-                        return "Email Confirmed Successfully";
-                    }
-                    else
-                    {
-                        throw new Exception("No Any User To Verify");
-                    }
-                    
-                }
-                throw new Exception("Failed Verifiy OTP");
-            }
-            else
-            {
-                throw new Exception("Email and Password Are Required");
-            }
-        }
-        public async Task<string> VerifyOTP(VerificationInputDTO input)
-        {
-            if (input != null)
-            {
-                var code = await _context.VerificationCodes.FirstOrDefaultAsync(x => x.Email == input.Email
-                && x.Code == input.Code);
-                if (code != null)
-                {
-                    code.IsActive = false;
-                    code.ModifiedDate = DateTime.Now;
-                    _context.Update(code);
-                    _context.SaveChanges();
-
-                    var person = await _context.Users.FirstOrDefaultAsync(x => x.Email == input.Email);
-                    return person != null ? await TokenHelper.GenerateToken(person.Id.ToString(), "Admin") : "Authantication Failed";
-                }
-                throw new Exception("Failed Verifiy OTP");
-            }
-            else
-            {
-                throw new Exception("Email and Password Are Required");
             }
         }
     }

@@ -16,7 +16,7 @@ namespace TahalufAssignmentCore.Helpers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                        new Claim("PersonName",fullname),
+                        new Claim("UserName",fullname),
                         new Claim("Email",email),
                         new Claim(ClaimTypes.Role,fullname)
                 }),

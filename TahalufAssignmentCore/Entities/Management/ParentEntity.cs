@@ -11,8 +11,6 @@ namespace TahalufAssignmentCore.Entities.Management
         public int Id { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.Now;
         public DateTime? ModifiedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public string? UpdatedBy { get; set; }
         public bool IsActive { get; set; }
     }
 }

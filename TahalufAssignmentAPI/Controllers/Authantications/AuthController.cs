@@ -16,8 +16,23 @@ namespace TahalufAssignmentAPI.Controllers.Authantications
         {
             _authantication = authantication;
         }
+        [AllowAnonymous]
+        [HttpPost("Register")]
 
-        //Login.=
+        public async Task<IActionResult> Register([FromBody] SiteUserCreateDTO input)
+        {
+            try
+            {
+                var response = await _authantication.RegisterUser(input);
+                return response.Equals("Authantication Failed") ? BadRequest("Failed Create Account") : Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [AllowAnonymous]
         [HttpPost("Login")]
         
@@ -34,30 +49,13 @@ namespace TahalufAssignmentAPI.Controllers.Authantications
                 return StatusCode(500, ex.Message);
             }
         }
-        [AllowAnonymous]
-        [HttpPost("VerifyOTP")]
-        
-        public async Task<IActionResult> VerifyOTP(VerificationInputDTO input)
-        {
-            try
-            {
-                var response = await _authantication.VerifyOTP(input);
-                return response.Equals("Authantication Failed") ? Unauthorized("Verification Is Not Correct") : Ok(response);
-
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        //Logout
         [HttpPut("Logout")]
         public async Task<IActionResult> Logout([FromRoute] int input)
         {
             try
             {
                 var response = await _authantication.Logout(input);
-                return response ? Ok("Logout Successfully") : Unauthorized("Person Id Is Not Correct");
+                return response ? Ok("Logout Successfully") : Unauthorized("User Id Is Not Correct");
 
             }
             catch (Exception ex)

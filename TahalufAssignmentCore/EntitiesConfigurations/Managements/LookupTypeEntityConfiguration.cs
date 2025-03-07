@@ -15,8 +15,6 @@ namespace TahalufAssignmentCore.EntitiesConfigurations.Managements
         {
             builder.ToTable("LookupTypes");
             builder.Property(x => x.IsActive).HasDefaultValue(true);
-
-            builder.Property(x => x.CreatedBy).HasColumnType("VARCHAR(255)").HasDefaultValue("System");
             //Allow Arabics 
             builder.Property(x => x.NameAr).IsUnicode(true);
             //Let Uniques 
