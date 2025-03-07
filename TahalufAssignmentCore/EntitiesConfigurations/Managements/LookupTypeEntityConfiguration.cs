@@ -21,8 +21,8 @@ namespace TahalufAssignmentCore.EntitiesConfigurations.Managements
             builder.HasIndex(x => x.NameAr).IsUnique(true);
             builder.HasIndex(x => x.Name).IsUnique(true);
             //Check 
-            builder.ToTable(x => x.HasCheckConstraint("CH_NameAr_Length", "CHAR_LENGTH(Name) >= 2"));
-            builder.ToTable(x => x.HasCheckConstraint("CH_Name_Length", "CHAR_LENGTH(NameAr) >= 2"));
+            builder.ToTable(x => x.HasCheckConstraint("CH_NameAr_Length", "LEN(Name) >= 2"));
+            builder.ToTable(x => x.HasCheckConstraint("CH_Name_Length", "LEN(NameAr) >= 2"));
             //RelationShips
             builder.HasMany<LookupItem>().WithOne().HasForeignKey(x => x.LookupTypeId);
         }

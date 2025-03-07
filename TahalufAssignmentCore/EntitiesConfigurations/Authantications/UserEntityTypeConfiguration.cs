@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MySql.EntityFrameworkCore.Extensions;
 using TahalufAssignmentCore.Entities.Authantication;
 using System;
 using System.Collections.Generic;
@@ -17,7 +16,7 @@ namespace TahalufAssignmentCore.EntitiesConfigurations.Authantications
             builder.ToTable("Users");
             builder.HasKey(x => x.Id);
             //Default values
-            builder.Property(x => x.Id).UseMySQLAutoIncrementColumn("Id");
+            builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x=>x.IsActive).HasDefaultValue(true);
             builder.Property(x => x.IsLoggedIn).HasDefaultValue(false);
             builder.Property(x => x.UserType).HasColumnType("VARCHAR(255)").HasDefaultValue("Student");
@@ -31,8 +30,8 @@ namespace TahalufAssignmentCore.EntitiesConfigurations.Authantications
             builder.HasIndex(x => x.Email).IsUnique(true);
             builder.HasIndex(x => x.Username).IsUnique(true);
             //Check Constraints
-            builder.ToTable(x => x.HasCheckConstraint("CH_UserFirstName", "CHAR_LENGTH(FirstName)>=3"));
-            builder.ToTable(x => x.HasCheckConstraint("CH_UserLastName", "CHAR_LENGTH(LastName)>=3"));
+            builder.ToTable(x => x.HasCheckConstraint("CH_UserFirstName", "LEN(FirstName)>=3"));
+            builder.ToTable(x => x.HasCheckConstraint("CH_UserLastName", "LEN(LastName)>=3"));
             builder.ToTable(x => x.HasCheckConstraint("CH_UserType", "UserType like 'Admin'"));
         }
     }

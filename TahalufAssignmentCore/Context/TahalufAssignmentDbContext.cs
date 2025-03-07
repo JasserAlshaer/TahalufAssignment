@@ -4,7 +4,6 @@ using TahalufAssignmentCore.EntitiesConfigurations.Authantications;
 using TahalufAssignmentCore.EntitiesConfigurations.Managements;
 using TahalufAssignmentCore.Helpers;
 using Microsoft.EntityFrameworkCore;
-using MySql.EntityFrameworkCore.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

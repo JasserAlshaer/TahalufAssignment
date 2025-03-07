@@ -73,7 +73,7 @@ builder.Services.AddAuthorization(options =>
 //Configure Mail Settings
 EmailSetting.Initialize(builder.Configuration);
 TokenSetting.Initialize(builder.Configuration);
-builder.Services.AddDbContext<TahalufAssignmentDbContext>(x => x.UseMySQL(builder.Configuration.GetConnectionString("default")));
+builder.Services.AddDbContext<TahalufAssignmentDbContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 //Services
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ILookupTypeServices, LookupTypeServices>();
