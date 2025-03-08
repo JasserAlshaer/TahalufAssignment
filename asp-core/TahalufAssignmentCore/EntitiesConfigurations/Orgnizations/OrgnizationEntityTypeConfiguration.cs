@@ -16,7 +16,7 @@ namespace TahalufAssignmentCore.EntitiesConfigurations.Orgnizations
         {
             builder.ToTable("Orgnizations");
             //Relationships
-            builder.HasMany<Company>().WithOne().HasForeignKey(x=>x.OrgnizationId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany<Company>().WithOne().HasForeignKey(x=>x.OrganizationId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
