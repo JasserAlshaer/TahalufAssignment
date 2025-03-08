@@ -104,7 +104,7 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                 {
                     var query = from company in _dbContext.Companies
                                 join orgnization in _dbContext.Orgnizations
-                                on company.OrgnizationId equals orgnization.Id
+                                on company.OrganizationId equals orgnization.Id
                                 join country in _dbContext.LookupItems
                                 on company.CountryId equals country.Id
                                 where orgnization.Id == Id
@@ -142,14 +142,14 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
             {
                 var query = from company in _dbContext.Companies
                             join orgnization in _dbContext.Orgnizations
-                            on company.OrgnizationId equals orgnization.Id
+                            on company.OrganizationId equals orgnization.Id
                             join country in _dbContext.LookupItems
                             on company.CountryId equals country.Id
                             where
                             (input.Name == null || company.Name.Contains(input.Name)) &&
                             (input.Code == null || company.Code.Contains(input.Code)) &&
                             (input.CountryId == null || company.CountryId.Equals(input.CountryId))&&
-                            (input.OrgnizationId == null || company.OrgnizationId.Equals(input.OrgnizationId))
+                            (input.OrgnizationId == null || company.OrganizationId.Equals(input.OrgnizationId))
                             select new CompanyDTO
                             {
                                 Id = orgnization.Id,
