@@ -101,7 +101,7 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                 var item = await orgnizationRepository.IsExisit(x => x.Id == Id);
                 if (item)
                 {
-                    var query = from orgnization in _dbContext.Companies
+                    var query = from orgnization in _dbContext.Orgnizations
                                 join country in _dbContext.LookupItems
                                 on orgnization.CountryId equals country.Id
                                 where orgnization.Id == Id
@@ -117,7 +117,7 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                                     Phone = orgnization.Phone,
                                     UpdateDate = orgnization.ModifiedDate == null ? "" : ((DateTime)orgnization.ModifiedDate).ToShortDateString()
                                 };
-                    return await query.FirstOrDefaultAsync();
+                    return await query.SingleAsync();
                 }
                 else
                 {

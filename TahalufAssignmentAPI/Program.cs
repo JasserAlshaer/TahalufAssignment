@@ -16,6 +16,7 @@ using TahalufAssignmentInfrastructure.Repositories;
 using TahalufAssignmentCore.Mappers;
 using TahalufAssignmentCore.Services.AppServices;
 using TahalufAssignmentInfrastructure.Services.AppServices;
+using Microsoft.Extensions.Options;
 
 
 var builder = WebApplication.CreateBuilder(args);

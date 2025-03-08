@@ -14,6 +14,6 @@ namespace TahalufAssignmentCore.Entities.Companies
         public string Phone { get; set; }
         public string Address { get; set; }
         public int CountryId { get; set; }
-        public int OrgnizationId { get; set; }
+        public int OrganizationId { get; set; }
     }
 }

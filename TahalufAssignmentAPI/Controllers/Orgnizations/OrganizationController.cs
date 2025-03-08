@@ -28,7 +28,7 @@ namespace TahalufAssignmentAPI.Controllers.Orgnizations
                 var response = new DataResponseDto<OrgnizationInfoDTO>()
                 {
                     Entity = item,
-                    Message = "Orgnization Has been Removed From The System",
+                    Message = "Orgnization Has been Returned From The System",
                     StatusCode = 200
                 };
                 return StatusCode(200, response);
