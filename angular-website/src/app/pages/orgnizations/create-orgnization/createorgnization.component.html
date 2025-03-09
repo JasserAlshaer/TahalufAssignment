@@ -1,0 +1,42 @@
+<mat-sidenav-container style="height: 100vh; overflow: hidden;">
+  <!-- Sidebar -->
+  <mat-sidenav
+    mode="side"
+    opened="true"
+    #sidenav
+    style="width: 250px; height: 100%; background-color: #1f2937; color: #ffffff; display: flex; flex-direction: column; justify-content: space-between; padding: 20px;">
+    <!-- Sidebar Header -->
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h2 style="color: #4f93ff; margin: 0; font-size: 1.5rem;">OMS</h2>
+    </div>
+
+    <!-- Sidebar Links -->
+    <div style="flex-grow: 1;">
+      <div class="my-4" routerLinkActive="active-link">
+        <mat-icon style="color: #4f93ff;">dashboard</mat-icon>
+        <a  routerLink="/dashboard" class="link">Dashboard</a>
+      </div>
+
+      <div class="my-4" routerLinkActive="active-link">
+        <mat-icon style="color: #4f93ff;">groups</mat-icon>
+        <a  routerLink="/manage-orgnization" class="link">Organizations</a>
+      </div>
+      
+      <div class="my-4" routerLinkActive="active-link">
+        <mat-icon style="color: #4f93ff;">business</mat-icon>
+        <a  routerLink="/manage-compaines" class="link">Companies</a>
+      </div>
+    </div>
+
+    <!-- Logout Button -->
+    <div>
+      <button
+        mat-button
+        style="width: 100%; text-align: left; padding: 10px 15px; font-size: 1rem; color: #ffffff; background-color: #ef4444; font-weight: bold; display: flex; align-items: center; gap: 15px; border-radius: 5px;">
+        <mat-icon style="color: #ffffff;">logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content -->

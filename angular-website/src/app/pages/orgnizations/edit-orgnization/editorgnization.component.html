@@ -1,0 +1,15 @@
+<!-- Section: Design Block -->
+<form>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Blog Title</label>
+    <input type="email" class="form-control"
+    [(ngModel)]="input.name" name="name"
+    id="exampleFormControlInput1" placeholder="name@example.com">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Article</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="input.country" name="country" rows="3"></textarea>
+  </div>
+  <button (click)="SaveInfo()" class="btn btn-outline-primary">Save</button>
+
+</form>

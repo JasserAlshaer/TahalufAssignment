@@ -32,7 +32,7 @@ namespace TahalufAssignmentInfrastructure.Services
                         authUser.LastLoginDate = DateTime.Now;
                         _context.Update(authUser);
                         _context.SaveChanges();
-                        return authUser != null ? await TokenHelper.GenerateToken(authUser.Id.ToString(), "Admin") : "Authantication Failed";
+                        return authUser != null ? await TokenHelper.GenerateToken(authUser) : "Authantication Failed";
                     }
                     else
                     {

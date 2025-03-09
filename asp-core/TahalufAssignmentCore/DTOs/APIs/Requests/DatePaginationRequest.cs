@@ -8,7 +8,7 @@ namespace TahalufAssignmentCore.DTOs.APIs.Requests
 {
     public class DatePaginationRequest<T>
     {
-        public int Size { get; set; } = 10;
+        public int Size { get; set; } = 5;
         public int Index { get; set; } = 0;
         public T? Input { get; set; }
     }

@@ -2,13 +2,14 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TahalufAssignmentCore.Entities.Authantication;
 using TahalufAssignmentCore.Helpers.Settings;
 
 namespace TahalufAssignmentCore.Helpers
 {
     public static class TokenHelper
     {
-        public async static Task<string> GenerateToken(string email, string fullname)
+        public async static Task<string> GenerateToken(User authanticatedUser)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.UTF8.GetBytes(TokenSetting.Secret);
@@ -16,9 +17,10 @@ namespace TahalufAssignmentCore.Helpers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                        new Claim("UserName",fullname),
-                        new Claim("Email",email),
-                        new Claim(ClaimTypes.Role,fullname)
+                        new Claim("UserName",authanticatedUser.FirstName + " " + authanticatedUser.LastName),
+                        new Claim("Email",authanticatedUser.Email),
+                        new Claim("UserId",authanticatedUser.Id.ToString()),
+                        new Claim(ClaimTypes.Role,authanticatedUser.UserType)
                 }),
                 Expires = DateTime.Now.AddHours(TokenSetting.ValidityTime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey)

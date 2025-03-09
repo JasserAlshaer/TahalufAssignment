@@ -1,0 +1,29 @@
+
+.active-link {
+    background-color: #ffffff !important;
+    color: #4f93ff !important;
+    font-weight: bold;
+    border-radius: 5px;
+    height: 45px;
+    padding: 5px;
+  }
+  .active-link a {
+    color: #4f93ff !important;
+    font-weight: bold;
+   
+  }
+  .link{
+    width: 100%;
+    text-decoration: none;
+    color: #ffffff;
+    margin-left: 10px;
+    font-size: x-large;
+  }
+
+  a[mat-button]:hover {
+    background-color: #374151;
+  }
+  
+  button[mat-button]:hover {
+    background-color: #dc2626;
+  }
