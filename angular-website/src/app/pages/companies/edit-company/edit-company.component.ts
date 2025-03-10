@@ -112,11 +112,13 @@ export class EditCompanyComponent {
       inputDto.organizationId = this.input.organizationId
       inputDto.code = this.input.code
       inputDto.phone = this.input.phone
-      this.backend.UpdateOrgnization(inputDto).subscribe((res) => {
+      this.backend.UpdateCompany(inputDto).subscribe((res) => {
         this.spinner.hide()
         this.tostr.success(res.message)
         this.selectedCountryId = null
         this.selectedCountryName = ''
+        this.selectedOrgnizationId = null
+        this.selectedOrgnizationName = ''
         this.dialog.closeAll()
 
       }, (err) => {

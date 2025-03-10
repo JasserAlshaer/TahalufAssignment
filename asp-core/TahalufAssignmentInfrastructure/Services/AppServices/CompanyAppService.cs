@@ -11,6 +11,7 @@ using TahalufAssignmentCore.DTOs.APIs.Responses;
 using TahalufAssignmentCore.DTOs.Companies;
 using TahalufAssignmentCore.DTOs.Orgnizations;
 using TahalufAssignmentCore.Entities.Companies;
+using TahalufAssignmentCore.Entities.Orgnizations;
 using TahalufAssignmentCore.Helpers;
 using TahalufAssignmentCore.Interfaces;
 using TahalufAssignmentCore.Services.AppServices;
@@ -61,8 +62,8 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                 else
                 {
                     //Update
-                    var company = await companyRepository.GetByIdAsync((int)input.Id);
-                    if(company != null)
+                    var company = await _dbContext.Companies.AsNoTracking().FirstOrDefaultAsync(x => x.Id == input.Id);
+                    if (company != null)
                     {
                         company = _mapper.Map<Company>(input);
                         await companyRepository.UpdateAsync(company);
@@ -121,7 +122,7 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                                 on company.OrganizationId equals orgnization.Id
                                 join country in _dbContext.LookupItems
                                 on company.CountryId equals country.Id
-                                where orgnization.Id == Id
+                                where company.Id == Id
                                 select new CompanyInfoDTO
                                 {
                                     Id = company.Id,

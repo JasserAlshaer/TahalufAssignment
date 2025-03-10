@@ -49,7 +49,7 @@
             
   
             <mat-grid-tile colspan="12">
-              <mat-form-field appearance="outline" class="col-md-3 mx-1">
+              <mat-form-field appearance="outline" class="col-md-5 mx-2">
                 <mat-label>Country</mat-label>
                 <input matInput placeholder="Enter Country" [matAutocomplete]="auto" [(ngModel)]="selectedCountryName"
                   (input)="filterCountries($event)" required />
@@ -64,21 +64,21 @@
   
   
             <mat-grid-tile colspan="12">
-              <mat-form-field appearance="outline" class="col-md-3 mx-1">
+              <mat-form-field appearance="outline" class="col-md-5 mx-2">
                 <mat-label>Phone</mat-label>
                 <input matInput [(ngModel)]="input.phone" placeholder="Enter Phone Number" required>
               </mat-form-field>
             </mat-grid-tile>
   
             <mat-grid-tile colspan="12" rowspan="1">
-              <mat-form-field appearance="outline" class="col-md-3 mx-1" disabled>
+              <mat-form-field appearance="outline" class="col-md-5 mx-2" disabled>
                 <mat-label>Creation Date</mat-label>
                 <input matInput [value]="input.createDate| date:'medium'" disabled>
               </mat-form-field>
             </mat-grid-tile>
   
             <mat-grid-tile colspan="12" rowspan="1">
-              <mat-form-field appearance="outline" class="col-md-2" disabled>
+              <mat-form-field appearance="outline" class="col-md-5" disabled>
                 <mat-label>Updating Date</mat-label>
                 <input matInput [value]="date | date:'medium'" disabled>
               </mat-form-field>

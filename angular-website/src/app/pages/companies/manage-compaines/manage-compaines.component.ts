@@ -65,7 +65,7 @@ export class ManageCompainesComponent {
     this.GetCountries()
     this.GetOrgnizations()
   }
-  GetOrgnizations(){
+  GetOrgnizations() {
     this.spinner.show()
     this.backend.GetOrgnizations().subscribe((res) => {
       this.allOrganizations = res
@@ -240,15 +240,23 @@ export class ManageCompainesComponent {
     this.backend.GetCompanyById(Id).subscribe(
       (res) => {
         this.spinner.hide();
-        const updateref = this.dialog.open(EditCompanyComponent, {
-          width: '900px',
-          height: '450px',
-          data: res.entity,
-        });
+        if (res.entity != undefined) {
+          const updateref = this.dialog.open(EditCompanyComponent, {
+            width: '900px',
+            height: '450px',
+            data: res.entity,
+          });
+
+          updateref.afterClosed().subscribe(() => {
+            this.loadOriginal();
+          });
+        } else {
+          this.toastr.error('Company not found.');
+        }
       },
       (err) => {
         this.spinner.hide();
-        this.toastr.error('Load Company failed');
+        this.toastr.error('Load Organization failed');
       }
     );
 
