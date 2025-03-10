@@ -12,6 +12,7 @@ using TahalufAssignmentCore.DTOs.Companies;
 using TahalufAssignmentCore.DTOs.Orgnizations;
 using TahalufAssignmentCore.Entities.Companies;
 using TahalufAssignmentCore.Entities.Orgnizations;
+using TahalufAssignmentCore.Helpers;
 using TahalufAssignmentCore.Interfaces;
 using TahalufAssignmentCore.Services.AppServices;
 
@@ -33,11 +34,23 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
         {
             try
             {
+                if (!ValidationHelper.IsValidCode(input.Code))
+                    throw new Exception("Invalid Code Value");
+                if (!ValidationHelper.IsValidName(input.Name))
+                    throw new Exception("Invalid Name Value");
+                if (!ValidationHelper.IsValidInternationalPhone(input.Phone))
+                    throw new Exception("Invalid Phone Value");
+                if (await _dbContext.LookupItems.AnyAsync(x => x.Id.Equals(input.CountryId)))
+                    throw new Exception("Country Id Should be Exisit");
                 var orgnizationRepository = _unitOfWork.Repository<Orgnization>();
                 _unitOfWork.BeginTransaction();
                 if (input.Id == null)
                 {
                     //Create
+                    if (await _dbContext.Orgnizations.AnyAsync(x => x.Name.Equals(input.Name)))
+                        throw new Exception("Orgnizations Name Should be Unique");
+                    if (await _dbContext.Orgnizations.AnyAsync(x => x.Code.Equals(input.Code)))
+                        throw new Exception("Orgnizations Code Should be Unique");
                     var orgnization = _mapper.Map<Orgnization>(input);
                     await orgnizationRepository.AddAsync(orgnization);
                     await _unitOfWork.SaveChangesAsync();

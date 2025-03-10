@@ -11,6 +11,7 @@ using TahalufAssignmentCore.DTOs.APIs.Responses;
 using TahalufAssignmentCore.DTOs.Companies;
 using TahalufAssignmentCore.DTOs.Orgnizations;
 using TahalufAssignmentCore.Entities.Companies;
+using TahalufAssignmentCore.Helpers;
 using TahalufAssignmentCore.Interfaces;
 using TahalufAssignmentCore.Services.AppServices;
 
@@ -33,12 +34,25 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
 
             try
             {
+                if (!ValidationHelper.IsValidCode(input.Code))
+                    throw new Exception("Invalid Code Value");
+                if (!ValidationHelper.IsValidName(input.Name))
+                    throw new Exception("Invalid Name Value");
+                if (!ValidationHelper.IsValidInternationalPhone(input.Phone))
+                    throw new Exception("Invalid Phone Value");
+                if (await _dbContext.LookupItems.AnyAsync(x => x.Id.Equals(input.CountryId)))
+                    throw new Exception("Country Id Should be Exisit");
+                if (await _dbContext.Orgnizations.AnyAsync(x => x.Id.Equals(input.OrganizationId)))
+                    throw new Exception("Orgnization Id Should be Exisit");
                 var companyRepository = _unitOfWork.Repository<Company>();
                 _unitOfWork.BeginTransaction();
                 if(input.Id == null)
                 {
                     //Create
-                    
+                    if (await _dbContext.Companies.AnyAsync(x => x.Name.Equals(input.Name)))
+                        throw new Exception("Comnpany Name Should be Unique");
+                    if (await _dbContext.Companies.AnyAsync(x => x.Code.Equals(input.Code)))
+                        throw new Exception("Comnpany Code Should be Unique");
                     var company = _mapper.Map<Company>(input);
                     await companyRepository.AddAsync(company);
                     await _unitOfWork.SaveChangesAsync();
