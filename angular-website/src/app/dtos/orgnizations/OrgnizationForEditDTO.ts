@@ -1,6 +1,6 @@
 export class OrgnizationForEditDTO{
     id: number|undefined;
-    name: string|undefined;
+    name: string = "";
     code: string|undefined;
     phone: string|undefined;
     address: string|undefined;

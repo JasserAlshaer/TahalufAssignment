@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { MainServiceService } from 'src/app/backend/main-service.service';
+import { ConfirmDialogData } from 'src/app/dtos/confirmDialog/conifrmdialog';
+import { LookupItemDto } from 'src/app/dtos/lookups/LookupItemDto';
 import { CreateUpdateOrgnizationDTO } from 'src/app/dtos/orgnizations/CreateUpdateOrgnizationDTO';
+import { ConfirmDialogComponent } from 'src/app/sharedcomponent/confirm-dialog/confirm-dialog.component';
 
 
 @Component({
@@ -14,57 +18,114 @@ import { CreateUpdateOrgnizationDTO } from 'src/app/dtos/orgnizations/CreateUpda
 export class CreateOrgnizationComponent {
   input: CreateUpdateOrgnizationDTO = new CreateUpdateOrgnizationDTO();
   attachement: File | undefined;
+  currentRoute: string = '';
+  selectedCountryId: number | null = null; // Holds the ID of the selected country
+  selectedCountryName: string = '';
+  countries: LookupItemDto[] = []
+  filteredCountries: LookupItemDto[] = [];
+  date = new Date() 
+  updatingDate = new Date() 
   constructor(
     public backend: MainServiceService,
     public tostr: ToastrService,
     public spinner: NgxSpinnerService,
-    public router: Router
-  ) {}
+    public router: Router,
+    public dialog: MatDialog,
+  ) { }
+
+  ngOnInit() {
+    this.GetCountries()
+  }
   onFileSelected(event: any) {
     if (event.target.files && event.target.files[0]) {
       this.attachement = event.target.files[0];
     }
   }
-  SaveInfo() {
-    /*if (this.input.title == undefined || this.input.title == '') {
-      this.tostr.warning('Title Is Required');
-      return;
-    }
-    if (this.input.article == undefined || this.input.article == '') {
-      this.tostr.warning('Article Is Required');
-      return;
-    }
-    let userId = localStorage.getItem('userId');
-    if (userId == null) {
-      this.tostr.warning('Must Logged In as Client');
-      return;
-    } else {
-      this.input.userId = parseInt(userId);
-      if (this.attachement == undefined) {
-        this.input.imagePath = '';
-      }else{
-        this.spinner.show()
-        this.backend.uploadImage(this.attachement).subscribe(res=>{
-          this.spinner.hide();
-          this.input.imagePath = res
-        },err=>{
-          this.spinner.hide();
-          return;
-        })
-      }
-
-      this.spinner.show();
-      this.backend.createorgnization(this.input).subscribe(
-        (res) => {
-          this.spinner.hide();
-          this.tostr.success('Created Successfully');
-          this.router.navigate(['/manage-blog-client']);
-        },
-        (err) => {
-          this.spinner.hide();
-          this.tostr.error('Failed To Creat Blog');
-        }
-      );
-    }*/
+  isActive(route: string): boolean {
+    return this.currentRoute === route;
   }
+  GetCountries() {
+    this.spinner.show()
+    this.backend.GetCountries(1).subscribe((res) => {
+      this.countries = res.items
+      this.filteredCountries = this.countries;
+      this.spinner.hide()
+    }, (err) => {
+      this.spinner.hide()
+    })
+  }
+  LogoutFuncationaity(): void {
+    this.spinner.show();
+    this.backend.Logout().subscribe((res) => {
+      localStorage.removeItem('isLoggedIn')
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
+      this.spinner.hide()
+      this.router.navigate([''])
+    }, (err) => {
+      this.spinner.hide()
+      this.tostr.error('Logout Failed')
+    });
+  }
+  onSave(): void {
+    this.spinner.show()
+    debugger
+    if (this.input.name && this.input.code && this.input.countryId && this.input.phone && this.input.address) {
+      this.backend.CreateOrgnization(this.input).subscribe((res)=>{
+        this.spinner.hide()
+        this.tostr.success(res.message)
+        this.input = new CreateUpdateOrgnizationDTO()
+        this.selectedCountryId = null
+        this.selectedCountryName = ''
+      },(err)=>{
+        this.spinner.hide()
+        this.tostr.error('Some thing Went Wrong While Save New Orgnizaition')
+      })
+    } else {
+      this.spinner.hide()
+      this.tostr.warning('Please fill all required fields');
+    }
+  }
+
+  onCancel(): void {
+    this.onBack();
+  }
+  onBack(): void {
+    let info = new ConfirmDialogData(
+      'Back to Organization"  ?',
+      'You haven\'t saved your changes yet. Do you want to leave without saving',
+       'Stay on this page',
+      'Leave this page'
+    );
+
+    const dialogres = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: info,
+    });
+
+    dialogres.afterClosed().subscribe((result) => {
+      if (!result) {
+        this.router.navigate(['/manage-companies'])
+      }
+    });
+  }
+  
+  filterCountries(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+    this.filteredCountries = this.countries.filter((country) =>
+      country.name.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }
+
+  // Handle country selection
+  onCountrySelected(countryId: number): void {
+    debugger
+    this.selectedCountryId = countryId;
+    this.input.countryId = this.selectedCountryId
+    const selectedCountry = this.countries.find((c) => c.id === countryId);
+    if (selectedCountry) {
+      this.selectedCountryName = selectedCountry.name; // Update the input field with the selected name
+    }
+  }
+
 }

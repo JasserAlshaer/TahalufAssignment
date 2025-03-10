@@ -146,17 +146,18 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                             join country in _dbContext.LookupItems
                             on company.CountryId equals country.Id
                             where
-                            (input.Name == null || company.Name.Contains(input.Name)) &&
-                            (input.Code == null || company.Code.Contains(input.Code)) &&
+                            (input.Name == null || company.Name.Trim().ToLower().Contains(input.Name.Trim().ToLower())) &&
+                            (input.Code == null || company.Code.Trim().ToLower().Contains(input.Code.Trim().ToLower())) &&
                             (input.CountryId == null || company.CountryId.Equals(input.CountryId))&&
                             (input.OrgnizationId == null || company.OrganizationId.Equals(input.OrgnizationId))
                             select new CompanyDTO
                             {
-                                Id = orgnization.Id,
-                                Code = orgnization.Code,
-                                Name = country.Name,
+                                Id = company.Id,
+                                Code = company.Code,
+                                Name = company.Name,
                                 CountryName = country.Name,
-                                CreationDate = orgnization.CreationDate.ToShortDateString(),
+                                Phone = company.Phone,
+                                CreationDate = company.CreationDate.ToShortDateString(),
                                 OrgnizationName = orgnization.Name
                             };
                 output.Items = await query.Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();

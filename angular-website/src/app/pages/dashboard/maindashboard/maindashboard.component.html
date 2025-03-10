@@ -1,43 +1,78 @@
-<mat-sidenav-container style="height: 100vh; overflow: hidden;">
-    <!-- Sidebar -->
-    <mat-sidenav
-      mode="side"
-      opened="true"
-      #sidenav
-      style="width: 250px; height: 100%; background-color: #1f2937; color: #ffffff; display: flex; flex-direction: column; justify-content: space-between; padding: 20px;">
-      <!-- Sidebar Header -->
-      <div style="text-align: center; margin-bottom: 20px;">
-        <h2 style="color: #4f93ff; margin: 0; font-size: 1.5rem;">OMS</h2>
-      </div>
-  
-      <!-- Sidebar Links -->
-      <div style="flex-grow: 1;">
-        <div class="my-4" routerLinkActive="active-link">
-          <mat-icon style="color: #4f93ff;">dashboard</mat-icon>
-          <a  routerLink="/dashboard" class="link">Dashboard</a>
+<div style="display: flex; height: 100vh; width: 100%;">
+  <!-- Sidebar Container -->
+  <div style="width: 18%;background-color: #1f2937;">
+    <mat-sidenav-container style="height: 100vh; overflow: scroll;">
+      <mat-sidenav mode="side" opened="true" #sidenav
+        style="width: 250px; height: 100%; background-color: #1f2937; color: #ffffff; display: flex; flex-direction: column; justify-content: space-between; padding: 20px;">
+        <!-- Sidebar Header -->
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h2 style="color: #4f93ff; margin: 0; font-size: 1.5rem;">OMS</h2>
         </div>
-  
-        <div class="my-4" routerLinkActive="active-link">
-          <mat-icon style="color: #4f93ff;">groups</mat-icon>
-          <a  routerLink="/manage-orgnization" class="link">Organizations</a>
+
+        <!-- Sidebar Links -->
+        <div style="flex-grow: 1;">
+          <div class="my-4" routerLinkActive="active-link">
+            <mat-icon style="color: #4f93ff;">dashboard</mat-icon>
+            <a routerLink="/dashboard" class="link">Dashboard</a>
+          </div>
+
+          <div class="my-4" routerLinkActive="active-link" >
+            <mat-icon style="color: #4f93ff;">groups</mat-icon>
+            <a routerLink="/manage-orgnization" class="link">Organizations</a>
+          </div>
+
+          <div class="my-4" routerLinkActive="active-link">
+            <mat-icon style="color: #4f93ff;">business</mat-icon>
+            <a routerLink="/manage-companies" class="link">Companies</a>
+          </div>
         </div>
-        
-        <div class="my-4" routerLinkActive="active-link">
-          <mat-icon style="color: #4f93ff;">business</mat-icon>
-          <a  routerLink="/manage-compaines" class="link">Companies</a>
+
+        <!-- Logout Button -->
+        <div>
+          <button mat-button (click)="LogoutFuncationaity()"
+            style="width: 100%; text-align: left; padding: 10px 15px; font-size: 1rem; color: #ffffff; background-color: #ef4444; font-weight: bold; display: flex; align-items: center; gap: 15px; border-radius: 5px;">
+            <mat-icon style="color: #ffffff;">logout</mat-icon>
+            <span>Logout</span>
+          </button>
         </div>
-      </div>
-  
-      <!-- Logout Button -->
-      <div>
-        <button
-          mat-button
-          style="width: 100%; text-align: left; padding: 10px 15px; font-size: 1rem; color: #ffffff; background-color: #ef4444; font-weight: bold; display: flex; align-items: center; gap: 15px; border-radius: 5px;">
-          <mat-icon style="color: #ffffff;">logout</mat-icon>
-          <span>Logout</span>
-        </button>
-      </div>
-    </mat-sidenav>
-  
-    <!-- Main Content -->
-  
+      </mat-sidenav>
+    </mat-sidenav-container>
+  </div>
+
+  <!-- Main Content Container -->
+  <div style="flex-grow: 1; padding: 10px;margin-right: 10px;">
+    <h1 style="margin-top: 20px;">General Informations About System</h1>
+    <div class="container">
+      <div class="row">
+          <div class="col-md-4 col-xl-4">
+              <div class="card bg-c-blue order-card">
+                  <div class="card-block">
+                    <h1 class="m-b-20">Users</h1>
+                    <h2 class="text-right"><span>{{data.usersCount}}</span></h2>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="col-md-4 col-xl-4">
+              <div class="card bg-c-green order-card">
+                  <div class="card-block">
+                    <h1 class="m-b-20">Organizations</h1>
+                    <h2 class="text-right"><span>{{data.orgnizationsCount}}</span></h2>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="col-md-4 col-xl-4">
+              <div class="card bg-c-yellow order-card">
+                  <div class="card-block">
+                      <h1 class="m-b-20">Companies</h1>
+                      <h2 class="text-right"><span>{{data.companiesCount}}</span></h2>
+                    
+                  </div>
+              </div>
+          </div>
+          
+    </div>
+  </div>
+  </div>
+</div>

@@ -22,18 +22,17 @@ import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-transla
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { ManageOrgnizationComponent } from './pages/orgnizations/manage-orgnization/manage-orgnization.component';
 import { EditOrgnizationComponent } from './pages/orgnizations/edit-orgnization/editorgnization.component';
-import { OrgnizationDetailsComponent } from './pages/orgnizations/orgnization-details/orgnization-details.component';
 import { CreateOrgnizationComponent } from './pages/orgnizations/create-orgnization/createorgnization.component';
 import { NavComponent } from './sharedcomponent/nav/nav.component';
 import { FooterComponent } from './sharedcomponent/footer/footer.component';
 import { ConfirmDialogComponent } from './sharedcomponent/confirm-dialog/confirm-dialog.component';
 import { ErrorComponent } from './pages/shared/error/error.component';
-import { AppComponent } from './app.component';
+import { AppComponent } from './base-component/app.component';
 import { ManageCompainesComponent } from './pages/companies/manage-compaines/manage-compaines.component';
 import { CreateCompanyComponent } from './pages/companies/create-company/create-company.component';
 import { EditCompanyComponent } from './pages/companies/edit-company/edit-company.component';
-import { CompanyDetailsComponent } from './pages/companies/company-details/company-details.component';
 import { MaindashboardComponent } from './pages/dashboard/maindashboard/maindashboard.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -48,7 +47,6 @@ export function createTranslateLoader(http: HttpClient) {
     SigninComponent,
     ManageOrgnizationComponent,
     EditOrgnizationComponent,
-    OrgnizationDetailsComponent,
     CreateOrgnizationComponent,
     ErrorComponent,
     NavComponent,
@@ -57,7 +55,6 @@ export function createTranslateLoader(http: HttpClient) {
     ManageCompainesComponent,
     CreateCompanyComponent,
     EditCompanyComponent,
-    CompanyDetailsComponent,
     MaindashboardComponent
   ],
   imports: [
@@ -77,6 +74,7 @@ export function createTranslateLoader(http: HttpClient) {
     MatPaginatorModule,
     MatDialogModule,
     NgxSpinnerModule,
+    MatAutocompleteModule,
     ToastrModule.forRoot(),
     TranslateModule.forRoot({
       loader: {

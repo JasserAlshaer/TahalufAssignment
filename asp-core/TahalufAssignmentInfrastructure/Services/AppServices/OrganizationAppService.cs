@@ -46,10 +46,12 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                 else
                 {
                     //Update
-                    var orgnization = await orgnizationRepository.GetByIdAsync((int)input.Id);
+                    var orgnization = await _dbContext.Orgnizations.AsNoTracking().FirstOrDefaultAsync(x=>x.Id==input.Id);
                     if (orgnization != null)
                     {
+
                         orgnization = _mapper.Map<Orgnization>(input);
+                        orgnization.ModifiedDate = DateTime.Now;
                         await orgnizationRepository.UpdateAsync(orgnization);
                         await _unitOfWork.SaveChangesAsync();
                         _unitOfWork.CommitTransaction();
@@ -131,6 +133,34 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                 throw new Exception($"Error Upon Completing Transaction  {ex.Message}");
             }
         }
+        public async Task<List<OrgnizationInfoDTO>> GetAllOrgnizations()
+        {
+            try
+            {
+                var query = from orgnization in _dbContext.Orgnizations
+                            join country in _dbContext.LookupItems
+                            on orgnization.CountryId equals country.Id
+                            select new OrgnizationInfoDTO
+                            {
+                                Id = orgnization.Id,
+                                Address = orgnization.Address,
+                                Code = orgnization.Code,
+                                Country = country.Name,
+                                Name = orgnization.Name,
+                                CountryId = country.Id,
+                                CreateDate = orgnization.CreationDate.ToShortDateString(),
+                                Phone = orgnization.Phone,
+                                UpdateDate = orgnization.ModifiedDate == null ? "" : ((DateTime)orgnization.ModifiedDate).ToShortDateString()
+                            };
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _unitOfWork.RollbackTransaction();
+                Log.Error(ex.StackTrace);
+                throw new Exception($"Error Upon Completing Transaction  {ex.Message}");
+            }
+        }
         public async Task<LoadItemDTO<OrgnizationDTO>> SearchOrgnization(SearchOrgnizationDTO input, int pageIndex, int pageSize)
         {
             LoadItemDTO<OrgnizationDTO> output = new LoadItemDTO<OrgnizationDTO>();
@@ -140,14 +170,15 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                             join country in _dbContext.LookupItems
                             on orgnization.CountryId equals country.Id
                             where
-                            (input.Name == null || orgnization.Name.Contains(input.Name)) &&
-                            (input.Code == null || orgnization.Code.Contains(input.Code)) &&
+                            (input.Name == null || orgnization.Name.Trim().ToLower().Contains(input.Name)) &&
+                            (input.Code == null || orgnization.Code.Trim().ToLower().Contains(input.Code)) &&
                             (input.CountryId == null || orgnization.CountryId.Equals(input.CountryId))
                             select new OrgnizationDTO
                             {
                                 Id = orgnization.Id,
                                 Code = orgnization.Code,
                                 CountryName = country.Name,
+                                Phone = orgnization.Phone,
                                 CreationDate = orgnization.CreationDate.ToShortDateString(),
                                 OrgnizationName = orgnization.Name
                             };

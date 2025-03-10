@@ -84,6 +84,7 @@ builder.Services.AddScoped<ILookupItemServices, LookupItemServices>();
 builder.Services.AddScoped<IAuthanticationService, AuthanticationService>();
 builder.Services.AddScoped<IOrganizationAppService, OrganizationAppService>();
 builder.Services.AddScoped<ICompanyAppService, CompanyAppService>();
+builder.Services.AddScoped<IDashboardAppService, DashboardAppService>();
 //Enabling With CORS
 builder.Services.AddCors(options =>
 {

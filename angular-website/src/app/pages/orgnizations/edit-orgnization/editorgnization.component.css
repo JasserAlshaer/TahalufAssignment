@@ -1,20 +1,14 @@
-form {
-    width: 80%;
-    padding: 15px;
-    margin-left: 85px;
-    text-align: left;
-}
-input {
-    margin: 20px;
-}
 
-textarea {
-    margin: 20px;
-}
-button{
-    text-align: center;
-    margin: auto;
-}
-label{
-    text-align: left;
-}
+.entry-section {
+    margin-bottom: 20px;
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: space-between;
+  }

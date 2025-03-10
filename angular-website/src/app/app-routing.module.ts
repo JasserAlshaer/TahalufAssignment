@@ -21,7 +21,7 @@ const routes: Routes = [
     path:'create-orgnization',
     component:CreateOrgnizationComponent
   },{
-    path:'manage-compaines',
+    path:'manage-companies',
     component:ManageCompainesComponent
   },
   {

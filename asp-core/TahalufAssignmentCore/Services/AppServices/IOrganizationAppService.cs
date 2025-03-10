@@ -12,6 +12,7 @@ namespace TahalufAssignmentCore.Services.AppServices
     public interface IOrganizationAppService
     {
         Task CreateUpdateOrgnization(CreateUpdateOrganizationDTO input);
+        Task<List<OrgnizationInfoDTO>> GetAllOrgnizations();
         Task<LoadItemDTO<OrgnizationDTO>> SearchOrgnization(SearchOrgnizationDTO input, int pageIndex, int pageSize);
         Task DeleteOrgnization(int Id); 
         Task<OrgnizationInfoDTO> GetOrgnizationInfo(int Id);

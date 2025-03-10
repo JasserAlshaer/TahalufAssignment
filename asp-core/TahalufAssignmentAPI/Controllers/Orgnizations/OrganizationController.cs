@@ -49,11 +49,11 @@ namespace TahalufAssignmentAPI.Controllers.Orgnizations
         }
         [RoleRequirement("Admin")]
         [HttpGet("Search-Orgnization")]
-        public async Task<IActionResult> GetSearchOrgnization([FromQuery] DatePaginationRequest<SearchOrgnizationDTO> input)
+        public async Task<IActionResult> GetSearchOrgnization([FromQuery] SearchOrgnizationDTO input, [FromQuery] DatePaginationRequest<object> request)
         {
             try
             {
-                var item = await _organizationAppService.SearchOrgnization(input.Input??new SearchOrgnizationDTO(),input.Index,input.Size);
+                var item = await _organizationAppService.SearchOrgnization(input??new SearchOrgnizationDTO(), request.Index, request.Size);
                 var response = new DatePaginationResponse<OrgnizationDTO>()
                 {
                     Items = item.Items,
@@ -61,6 +61,31 @@ namespace TahalufAssignmentAPI.Controllers.Orgnizations
                     Message = "Orgnization Has been Removed From The System",
                     StatusCode = 200
                 };
+                return StatusCode(200, response);
+
+            }
+            catch (Exception ex)
+            {
+                var error = new ErrorResponseDto()
+                {
+                    StatusCode = 500,
+                    Message = ex.Message,
+                    Details = ex.StackTrace,
+                    Timestamp = DateTime.Now
+                };
+                Log.Error("Error Was Occured on Get Orgnization Information");
+                return StatusCode(500, error);
+            }
+        }
+        [RoleRequirement("Admin")]
+        [HttpGet("All-Ogrnization")]
+        public async Task<IActionResult> GetAllOrgnizations()
+        {
+
+            try
+            {
+                var response = await _organizationAppService.GetAllOrgnizations();
+                
                 return StatusCode(200, response);
 
             }

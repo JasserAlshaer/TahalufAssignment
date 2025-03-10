@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +11,10 @@ import { LoginDTO } from 'src/app/dtos/authantications/LoginDTO';
   styleUrls: ['./signin.component.css']
 })
 export class SigninComponent {
+  @HostListener('document:keydown.enter', ['$event'])
+  handleEnter(event: KeyboardEvent): void {
+    this.Login();
+  }
   input : LoginDTO = new LoginDTO()
   constructor(public router:Router,public backend:MainServiceService,
     public spinner: NgxSpinnerService,public toastr : ToastrService
@@ -37,7 +41,7 @@ export class SigninComponent {
         localStorage.setItem('token',res)
         let data: any = jwtDecode(res);
         localStorage.setItem('userId',data.UserId)
-        this.router.navigate(['/manage-orgnization'])
+        this.router.navigate(['/dashboard'])
       },err=>{
         this.spinner.hide()
         this.toastr.error('Wrong User name / Password')

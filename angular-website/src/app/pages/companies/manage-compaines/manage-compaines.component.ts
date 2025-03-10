@@ -13,6 +13,9 @@ import { SearchCompanyDTO } from 'src/app/dtos/companies/SearchCompanyDTO';
 import { ConfirmDialogData } from 'src/app/dtos/confirmDialog/conifrmdialog';
 import { ConfirmDialogComponent } from 'src/app/sharedcomponent/confirm-dialog/confirm-dialog.component';
 import { EditCompanyComponent } from '../edit-company/edit-company.component';
+import { LookupItemDto } from 'src/app/dtos/lookups/LookupItemDto';
+import { OrgnizationDTO } from 'src/app/dtos/orgnizations/OrgnizationDTO';
+import { OrgnizationForEditDTO } from 'src/app/dtos/orgnizations/OrgnizationForEditDTO';
 
 @Component({
   selector: 'app-manage-compaines',
@@ -20,14 +23,27 @@ import { EditCompanyComponent } from '../edit-company/edit-company.component';
   styleUrls: ['./manage-compaines.component.css']
 })
 export class ManageCompainesComponent {
-displayedColumns: string[] = ['id', 'CompanyName', 'code', 'countryName', 'creationDate', 'Actions'];
-
+  displayedColumns: string[] = ['orgnizationName', 'code', 'name', 'phone', 'Actions'];
+  searchParams = {
+    orgName: '',
+    compName: '',
+    compCode: '',
+    country: ''
+  };
+  selectedCountryId: number | null | undefined = null; // Holds the ID of the selected country
+  selectedCountryName: string = '';
+  selectedOrgnizationId: number | null | undefined = null; // Holds the ID of the selected country
+  selectedOrgnizationName: string = '';
+  countries: LookupItemDto[] = []
+  filteredCountries: LookupItemDto[] = [];
+  inputDTO: SearchCompanyDTO = new SearchCompanyDTO()
   input: DatePaginationRequest<SearchCompanyDTO> = new DatePaginationRequest<SearchCompanyDTO>();
   dataSource: MatTableDataSource<CompanyDTO> = new MatTableDataSource();
-  CompanyDTOArray: CompanyDTO[] = [];
-
+  orgnizationDTOArray: CompanyDTO[] = [];
+  filteredOrganizations: OrgnizationForEditDTO[] = [];
+  allOrganizations: OrgnizationForEditDTO[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild(MatSort) sort: MatSort | null = null;
   pageEvent: PageEvent = new PageEvent;
   paginatorLength: number = 0;
   pageSize: number = 3;
@@ -46,10 +62,82 @@ displayedColumns: string[] = ['id', 'CompanyName', 'code', 'countryName', 'creat
 
   ngOnInit(): void {
     this.loadData();
+    this.GetCountries()
+    this.GetOrgnizations()
+  }
+  GetOrgnizations(){
+    this.spinner.show()
+    this.backend.GetOrgnizations().subscribe((res) => {
+      this.allOrganizations = res
+      this.filteredOrganizations = this.allOrganizations;
+      this.spinner.hide()
+    }, (err) => {
+      this.spinner.hide()
+    })
+  }
+  GetCountries() {
+    this.spinner.show()
+    this.backend.GetCountries(1).subscribe((res) => {
+      this.countries = res.items
+      this.filteredCountries = this.countries;
+      this.spinner.hide()
+    }, (err) => {
+      this.spinner.hide()
+    })
+  }
+
+  filterOrganizations(): void {
+    const filterValue = this.searchParams.orgName?.toLowerCase() || '';
+    this.filteredOrganizations = this.allOrganizations.filter(org => {
+      if (org != undefined)
+        org.name.toLowerCase().includes(filterValue)
+    }
+    );
+  }
+  filterCountries(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+    this.filteredCountries = this.countries.filter((country) =>
+      country.name.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }
+  LogoutFuncationaity(): void {
+    this.spinner.show();
+    this.backend.Logout().subscribe((res) => {
+
+      localStorage.removeItem('isLoggedIn')
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
+      this.spinner.hide()
+      this.router.navigate([''])
+    }, (err) => {
+      this.spinner.hide()
+      this.toastr.error('Logout Failed')
+    });
+  }
+
+  // Handle country selection
+  onCountrySelected(countryId: number): void {
+    debugger
+    this.selectedCountryId = countryId;
+    const selectedCountry = this.countries.find((c) => c.id === countryId);
+    if (selectedCountry) {
+      this.searchParams.country = selectedCountry.name;
+      this.selectedCountryName = selectedCountry.name; // Update the input field with the selected name
+    }
+  }
+  onOrganizationSelected(organizationId: number): void {
+
+    this.selectedOrgnizationId = organizationId
+    const selectedOrganization = this.allOrganizations.find(org => org.id === organizationId);
+    if (selectedOrganization) {
+      this.searchParams.orgName = selectedOrganization.name;
+      this.selectedOrgnizationName = selectedOrganization.name;
+    }
   }
 
   ngAfterViewInit(): void {
     this.loadData();
+    this.dataSource.sort = this.sort;
   }
 
   // This method gets called when the page is changed in the paginator
@@ -59,17 +147,72 @@ displayedColumns: string[] = ['id', 'CompanyName', 'code', 'countryName', 'creat
     this.paginatorLength = e.length;
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
-    
+
     this.loadData()
   }
 
+
+  loadOriginal() {
+    this.spinner.show();
+    this.searchParams = {
+      orgName: '',
+      compName: '',
+      compCode: '',
+      country: ''
+    };
+    this.inputDTO = new SearchCompanyDTO()
+    this.selectedCountryId = null
+    this.selectedCountryName = ''
+    this.selectedOrgnizationId = null
+    this.selectedOrgnizationName = ''
+    this.input = new DatePaginationRequest<SearchCompanyDTO>()
+    this.input.index = 0;
+    this.input.size = this.pageSize;
+    this.backend.SearchCompany(this.input).subscribe(
+      (res) => {
+        debugger
+        this.spinner.hide();
+        this.dataSource.data = res.items;  // Update the table with the new data
+        if (res.itemsCount != undefined)
+          this.paginatorLength = res.itemsCount;  // Update the paginator length (total items)
+
+        // Safely update the paginator state
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;  // Make sure the pageIndex stays in sync
+          this.paginator.length = this.paginatorLength;
+        }
+      },
+      (err) => {
+        this.spinner.hide();
+        this.toastr.error('Failed to load compaines');
+      }
+    );
+  }
   // This method loads the data from the backend
   loadData(): void {
     debugger
     this.spinner.show();
     this.input.index = this.pageIndex;
     this.input.size = this.pageSize;
-
+    debugger
+    if (this.searchParams.country != '' && this.searchParams.country != undefined) {
+      if (this.selectedCountryId != undefined) {
+        this.inputDTO.countryId = this.selectedCountryId
+      }
+    }
+    if (this.searchParams.orgName != '' && this.searchParams.orgName != undefined) {
+      if (this.selectedOrgnizationId != undefined) {
+        this.inputDTO.organizationId = this.selectedOrgnizationId
+      }
+    }
+    if (this.searchParams.compCode != '' && this.searchParams.compCode != undefined) {
+      this.inputDTO.code = this.searchParams.compCode
+    }
+    if (this.searchParams.compName != '' && this.searchParams.compName != undefined) {
+      this.inputDTO.name = this.searchParams.compName
+    }
+    this.input.input = this.inputDTO
+    debugger
     // Make the backend request with the updated pagination parameters
     this.backend.SearchCompany(this.input).subscribe(
       (res) => {
@@ -87,55 +230,27 @@ displayedColumns: string[] = ['id', 'CompanyName', 'code', 'countryName', 'creat
       },
       (err) => {
         this.spinner.hide();
-        this.toastr.error('Failed to load organizations');
+        this.toastr.error('Failed to load compaines');
       }
     );
   }
-
-  // This method is called when the user applies a filter
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    // Reset to first page if the filter is applied
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-  // Logout function
-  LogoutFuncationaity(): void {
-    this.spinner.show();
-    this.backend.Logout();
-  }
-
-  // Navigate back to home page
-  backToHome(): void {
-    this.router.navigate(['']);
-  }
-
-  // Create a new blog
-  CreateNewBlog(): void {
-    this.router.navigate(['/create-blog']);
-  }
-
   // Open the edit dialog for a blog
   EditCompany(Id: number): void {
     this.spinner.show();
-        this.backend.GetCompanyById(Id).subscribe(
-          (res) => {
-            this.spinner.hide();
-            const updateref = this.dialog.open(EditCompanyComponent, {
-              width: '700px',
-              data: res.entity,
-            });
-          },
-          (err) => {
-            this.spinner.hide();
-            this.toastr.error('Load Company failed');
-          }
-        );
-    
+    this.backend.GetCompanyById(Id).subscribe(
+      (res) => {
+        this.spinner.hide();
+        const updateref = this.dialog.open(EditCompanyComponent, {
+          width: '700px',
+          data: res.entity,
+        });
+      },
+      (err) => {
+        this.spinner.hide();
+        this.toastr.error('Load Company failed');
+      }
+    );
+
   }
 
   // Delete an organization

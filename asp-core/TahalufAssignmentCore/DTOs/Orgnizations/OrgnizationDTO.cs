@@ -11,6 +11,7 @@ namespace TahalufAssignmentCore.DTOs.Orgnizations
         public int    Id { get; set; }
         public string OrgnizationName { get; set; }
         public string Code { get; set; }
+        public string Phone { get; set; }
         public string CountryName { get; set; }
         public string CreationDate { get; set; }
     }

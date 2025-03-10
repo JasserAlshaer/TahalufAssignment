@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TahalufAssignmentCore.Attributes;
 using TahalufAssignmentCore.DTOs.Auths;
 using TahalufAssignmentCore.Services;
 
@@ -49,12 +50,13 @@ namespace TahalufAssignmentAPI.Controllers.Authantications
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPut("Logout")]
-        public async Task<IActionResult> Logout([FromRoute] int input)
+        [AllowAnonymous]
+        [HttpPut("Logout/{Id}")]
+        public async Task<IActionResult> Logout([FromRoute] int Id)
         {
             try
             {
-                var response = await _authantication.Logout(input);
+                var response = await _authantication.Logout(Id);
                 return response ? Ok("Logout Successfully") : Unauthorized("User Id Is Not Correct");
 
             }

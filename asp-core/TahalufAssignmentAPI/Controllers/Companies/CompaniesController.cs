@@ -49,11 +49,11 @@ namespace TahalufAssignmentAPI.Controllers.Companies
         }
         [RoleRequirement("Admin")]
         [HttpGet("Search-Company")]
-        public async Task<IActionResult> GetSearchCompany([FromQuery] DatePaginationRequest<SearchCompanyDTO> input)
+        public async Task<IActionResult> GetSearchCompany([FromQuery] SearchCompanyDTO  input, [FromQuery] DatePaginationRequest<object> request)
         {
             try
             {
-                var item = await _companyAppService.SearchCompanies(input.Input ?? new SearchCompanyDTO(), input.Index, input.Size);
+                var item = await _companyAppService.SearchCompanies(input ?? new SearchCompanyDTO(), request.Index, request.Size);
                 var response = new DatePaginationResponse<CompanyDTO>()
                 {
                     Items = item.Items,

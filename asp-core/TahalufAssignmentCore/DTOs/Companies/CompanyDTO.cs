@@ -12,6 +12,7 @@ namespace TahalufAssignmentCore.DTOs.Companies
         public string CountryName { get; set; }
         public string OrgnizationName { get; set; }
         public string Name { get; set; }
+        public string Phone { get; set; }
         public string Code { get; set; }
         public string CreationDate { get; set; }
     }
