@@ -79,11 +79,13 @@ export class CreateOrgnizationComponent {
         this.selectedCountryName = ''
       },(err)=>{
         this.spinner.hide()
-        this.tostr.error('Some thing Went Wrong While Save New Orgnizaition')
+        
+        this.tostr.error(err.error?.message || "An unknown error occurred.");
       })
     } else {
       this.spinner.hide()
       this.tostr.warning('Please fill all required fields');
+      
     }
   }
 
@@ -105,7 +107,7 @@ export class CreateOrgnizationComponent {
 
     dialogres.afterClosed().subscribe((result) => {
       if (!result) {
-        this.router.navigate(['/manage-companies'])
+        this.router.navigate(['/manage-orgnization'])
       }
     });
   }

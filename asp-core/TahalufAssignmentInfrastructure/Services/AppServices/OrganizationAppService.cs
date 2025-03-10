@@ -40,7 +40,7 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                     throw new Exception("Invalid Name Value");
                 if (!ValidationHelper.IsValidInternationalPhone(input.Phone))
                     throw new Exception("Invalid Phone Value");
-                if (await _dbContext.LookupItems.AnyAsync(x => x.Id.Equals(input.CountryId)))
+                if (!await _dbContext.LookupItems.AnyAsync(x => x.Id.Equals(input.CountryId)))
                     throw new Exception("Country Id Should be Exisit");
                 var orgnizationRepository = _unitOfWork.Repository<Orgnization>();
                 _unitOfWork.BeginTransaction();
@@ -128,9 +128,9 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                                     Country = country.Name,
                                     Name = orgnization.Name,
                                     CountryId = country.Id,
-                                    CreateDate = orgnization.CreationDate.ToShortDateString(),
+                                    CreateDate = orgnization.CreationDate.ToString(),
                                     Phone = orgnization.Phone,
-                                    UpdateDate = orgnization.ModifiedDate == null ? "" : ((DateTime)orgnization.ModifiedDate).ToShortDateString()
+                                    UpdateDate = orgnization.ModifiedDate == null ? "" : ((DateTime)orgnization.ModifiedDate).ToString()
                                 };
                     return await query.SingleAsync();
                 }
@@ -161,9 +161,9 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                                 Country = country.Name,
                                 Name = orgnization.Name,
                                 CountryId = country.Id,
-                                CreateDate = orgnization.CreationDate.ToShortDateString(),
+                                CreateDate = orgnization.CreationDate.ToString(),
                                 Phone = orgnization.Phone,
-                                UpdateDate = orgnization.ModifiedDate == null ? "" : ((DateTime)orgnization.ModifiedDate).ToShortDateString()
+                                UpdateDate = orgnization.ModifiedDate == null ? "" : ((DateTime)orgnization.ModifiedDate).ToString()
                             };
                 return await query.ToListAsync();
             }
@@ -192,7 +192,7 @@ namespace TahalufAssignmentInfrastructure.Services.AppServices
                                 Code = orgnization.Code,
                                 CountryName = country.Name,
                                 Phone = orgnization.Phone,
-                                CreationDate = orgnization.CreationDate.ToShortDateString(),
+                                CreationDate = orgnization.CreationDate.ToString(),
                                 OrgnizationName = orgnization.Name
                             };
                 output.Items = await query.Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();

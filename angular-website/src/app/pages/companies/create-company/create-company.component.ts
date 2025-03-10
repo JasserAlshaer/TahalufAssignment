@@ -167,7 +167,8 @@ export class CreateCompanyComponent {
         this.getOrgnizationDetailsButton = false
       }, (err) => {
         this.spinner.hide()
-        this.tostr.error('Some thing Went Wrong While Save New Category')
+        this.tostr.error('Some thing Went Wrong While Save New Company')
+        this.tostr.error(err.err.message)
       })
     } else {
       this.spinner.hide()

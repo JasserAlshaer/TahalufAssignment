@@ -1,0 +1,14 @@
+
+.entry-section {
+    margin-bottom: 20px;
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: space-between;
+  }

@@ -24,7 +24,7 @@ namespace TahalufAssignmentInfrastructure.Services
                 Id = x.Id,
                 Name = x.Name,
                 NameAr = x.NameAr,
-                CreationDate = x.CreationDate.ToShortDateString()
+                CreationDate = x.CreationDate.ToString()
             }).ToList();
 
         }

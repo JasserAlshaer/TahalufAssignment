@@ -1,1 +1,108 @@
-<p>edit-company works!</p>
+<mat-dialog-content style="overflow-y: hidden;">
+    <div class="dialog-title" style="margin-bottom: 20px; text-align: left;">
+      <h2>{{'Edit Company' }}</h2>
+    </div>
+    <div style="padding: 20px;">
+      <!-- Entry Section -->
+      <mat-card class="entry-section">
+        <mat-grid-list cols="12" rowHeight="auto" gutterSize="10px">
+            <mat-grid-tile colspan="7">
+              <mat-form-field appearance="outline" class="col-md-5 mx-1">
+                <mat-label>Company Name</mat-label>
+                <input matInput [(ngModel)]="input.name" placeholder="Enter Company Name" required>
+              </mat-form-field>
+            </mat-grid-tile>
+  
+            <mat-grid-tile colspan="5">
+              <mat-form-field appearance="outline" class="col-md-3 mx-1">
+                <mat-label>Company Code</mat-label>
+                <input matInput [(ngModel)]="input.code" placeholder="Enter Company Code" required>
+              </mat-form-field>
+            </mat-grid-tile>
+  
+            <mat-grid-tile colspan="12">
+              <mat-form-field appearance="outline" class="col-md-3 mx-1">
+                <mat-label>Organization</mat-label>
+                <input matInput placeholder="Enter Organization" [matAutocomplete]="autoOrg"
+                  [(ngModel)]="selectedOrgnizationName" (input)="filterOrganization($event)" required />
+                <mat-autocomplete #autoOrg="matAutocomplete"
+                  (optionSelected)="onOrgnizationSelected($event.option.value)">
+                  <mat-option *ngFor="let orgnization of filteredOrganizations" [value]="orgnization.id">
+                    {{ orgnization.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </mat-grid-tile>
+  
+            <mat-grid-tile colspan="12">
+              <div class="d-flex justify-content-center align-items-center h-100">
+                <button 
+                  mat-raised-button 
+                  color="primary" 
+                  class="my-4" 
+                  (click)="GetOrgnizationDetails()" 
+                  *ngIf="getOrgnizationDetailsButton">
+                  Get Organization Details
+                </button>
+              </div>
+            </mat-grid-tile>
+            
+  
+            <mat-grid-tile colspan="12">
+              <mat-form-field appearance="outline" class="col-md-3 mx-1">
+                <mat-label>Country</mat-label>
+                <input matInput placeholder="Enter Country" [matAutocomplete]="auto" [(ngModel)]="selectedCountryName"
+                  (input)="filterCountries($event)" required />
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCountrySelected($event.option.value)">
+                  <mat-option *ngFor="let country of filteredCountries" [value]="country.id">
+                    {{ country.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </mat-grid-tile>
+  
+  
+  
+            <mat-grid-tile colspan="12">
+              <mat-form-field appearance="outline" class="col-md-3 mx-1">
+                <mat-label>Phone</mat-label>
+                <input matInput [(ngModel)]="input.phone" placeholder="Enter Phone Number" required>
+              </mat-form-field>
+            </mat-grid-tile>
+  
+            <mat-grid-tile colspan="12" rowspan="1">
+              <mat-form-field appearance="outline" class="col-md-3 mx-1" disabled>
+                <mat-label>Creation Date</mat-label>
+                <input matInput [value]="input.createDate| date:'medium'" disabled>
+              </mat-form-field>
+            </mat-grid-tile>
+  
+            <mat-grid-tile colspan="12" rowspan="1">
+              <mat-form-field appearance="outline" class="col-md-2" disabled>
+                <mat-label>Updating Date</mat-label>
+                <input matInput [value]="date | date:'medium'" disabled>
+              </mat-form-field>
+            </mat-grid-tile>
+  
+  
+  
+  
+            <mat-grid-tile colspan="6">
+              <mat-form-field appearance="outline" class="col-md-11 mx-2">
+                <mat-label>Full Address</mat-label>
+                <textarea matInput [(ngModel)]="input.address" placeholder="Enter Full Address" rows="3"
+                  required></textarea>
+              </mat-form-field>
+            </mat-grid-tile>
+  
+  
+          </mat-grid-list>
+      </mat-card>
+  
+      <!-- Action Buttons -->
+      <div class="action-buttons" style="margin-top: 20px; text-align: right;">
+        <button mat-raised-button color="primary" (click)="onSave()">Save</button>
+        <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+      </div>
+    </div>
+  </mat-dialog-content>

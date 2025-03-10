@@ -27,7 +27,7 @@ namespace TahalufAssignmentInfrastructure.Services
                                   Id = item.Id,
                                   LookupTypeId = item.LookupTypeId,
                                   IsActive = item.IsActive,
-                                  CreationDate = item.CreationDate.ToShortDateString(),
+                                  CreationDate = item.CreationDate.ToString(),
                                   Name = item.Name,
                                   NameAr = item.NameAr,
                                   ParentName = parent.Name,

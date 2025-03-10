@@ -241,7 +241,8 @@ export class ManageCompainesComponent {
       (res) => {
         this.spinner.hide();
         const updateref = this.dialog.open(EditCompanyComponent, {
-          width: '700px',
+          width: '900px',
+          height: '450px',
           data: res.entity,
         });
       },
