@@ -1,0 +1,5 @@
+1- You Can Run Migration After Modify appsettings.json Connection String 
+
+
+
+2- Or You Can Edit the Connection String and Restore Backups 

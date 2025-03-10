@@ -1,0 +1,6 @@
+1- Go To Login Screen and Use The Following Information To Login 
+
+
+
+Username : admin 
+Password : 123qwe
